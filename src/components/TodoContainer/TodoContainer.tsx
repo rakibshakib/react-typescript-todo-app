@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 const TodoContainer = ({ addItem }: { addItem: (text: string) => void }) => {
-    const getText = useRef<HTMLInputElement>(null);
+    const getText = React.useRef<HTMLInputElement>(null);
 
     const addItems = () => {
         if (getText.current) {

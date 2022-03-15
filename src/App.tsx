@@ -30,7 +30,6 @@ const reducer = (state: TODO[], action: Actions) => {
     }
 };
 const state: TODO[] = [];
-
 function App() {
     const [todos, dispatch] = useReducer(reducer, state);
     const addItem = useCallback((text) => {
