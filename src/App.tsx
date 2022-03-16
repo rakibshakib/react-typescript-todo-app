@@ -1,7 +1,8 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import './App.css';
 import Display from './components/Display/Display';
 import TodoContainer from './components/TodoContainer/TodoContainer';
+
 interface TODO {
     id: number;
     text: string;
@@ -15,6 +16,7 @@ type Actions =
           type: 'DELETE';
           id: number;
       };
+
 const reducer = (state: TODO[], action: Actions) => {
     switch (action.type) {
         case 'ADD':
@@ -29,9 +31,14 @@ const reducer = (state: TODO[], action: Actions) => {
             return state.filter(({ id }) => id !== action.id);
     }
 };
-const state: TODO[] = [];
+// const state: TODO[] = [];
+
 function App() {
-    const [todos, dispatch] = useReducer(reducer, state);
+    const [todos, dispatch] = useReducer(reducer, [], () => {
+        let localData = localStorage.getItem('list');
+        return localData ? JSON.parse(localData) : [];
+    });
+
     const addItem = useCallback((text) => {
         dispatch({
             type: 'ADD',
@@ -40,12 +47,14 @@ function App() {
     }, []);
 
     const removeItem = (id: number) => {
-        console.log(id);
         dispatch({
             type: 'DELETE',
             id: id,
         });
     };
+    useEffect(() => {
+        localStorage.setItem('list', JSON.stringify(todos));
+    }, [todos]);
     return (
         <div className="App container mx-auto">
             <TodoContainer addItem={addItem} />
